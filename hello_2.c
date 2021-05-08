@@ -1,4 +1,4 @@
-/*convers command-line argument to number*/
+/*convers command-line argument to number print with puts*/
 #include <stdio.h>
 #include <stdlib.h> //use of atoi
 
@@ -14,6 +14,6 @@ int main(int argc, char* argv[])
 	else
 		for (i = 0; i < times; i++)
 		{
-			puts("Hello, beautiful\n");
+			puts("Hello, beautiful");
 		}
 }
