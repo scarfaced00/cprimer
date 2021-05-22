@@ -22,6 +22,6 @@ int sum(int ar[], int n)
 	{
 		sum += ar[i]; //sum += *(ar+i);
 	}
-
+	printf("The size of ar is %zd bytes\n", sizeof ar);
 	return sum;
 }
