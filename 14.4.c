@@ -1,54 +1,63 @@
-/*names2.c -- passes and returns structures*/
+/*names3.c -- use pointers and malloc()*/
 #include <stdio.h>
-#include <string.h>
-#define NLEN 30
+#include <string.h> //for strcpy(), strlen()
+#include <stdlib.h> //for malloc(), free()
+#define SLEN 81
 
 struct namect {
-	char fname[NLEN];
-	char lname[NLEN];
+	char * fname; //using pointers instead of arrays
+	char * lname;
 	int letters;
 };
 
-struct namect getinfo(void);
-struct namect makeinfo(struct namect);
-void showinfo(struct namect);
+void getinfo(struct namect *); //allocates memory
+void makeinfo(struct namect *);
+void showinfo(const struct namect *);
+void cleanup(struct namect *); //free memory when done
 char * s_gets(char * st, int n);
 
 int main(void)
 {
 	struct namect person;
 	
-	person = getinfo();
-	person = makeinfo(person);
-	showinfo(person);
+	getinfo(&person);
+	makeinfo(&person);
+	showinfo(&person);
+	cleanup(&person);
 
 	return 0;
 }
 
-
-struct namect getinfo(void)
+void getinfo(struct namect *pst)
 {
-	struct namect temp;
+	char temp[SLEN];
 	printf("Please enter your first name.\n");
-	s_gets(temp.fname, NLEN);
+	s_gets(temp, SLEN);
+	//allocate memory to hold name
+	pst->fname = (char *) malloc(strlen(temp) +1);
+	//copy name to allocated memory
+	strcpy(pst->fname, temp);
 	printf("Please enter your last name.\n");
-	s_gets(temp.lname, NLEN);
-	
-	return temp;
+	s_gets(temp, SLEN);
+	pst->lname = (char *) malloc(strlen(temp) +1);
+	strcpy(pst->lname, temp);
 }
 
-struct namect makeinfo(struct namect info)
+void makeinfo(struct namect * pst)
 {
-	info.letters = strlen(info.fname) + strlen(info.lname);
-	
-	return info;
+	pst->letters = strlen(pst->fname) + strlen(pst->lname);
 }
 
-void showinfo(struct namect info)
+void showinfo(const struct namect * pst)
 {
-	printf("%s %s, your name contains %d letters.\n", info.fname, info.lname, info.letters);
+	printf("%s %s, your name contains %d letters.\n", pst->fname, pst->lname, pst->letters);
 }
 
+void cleanup(struct namect * pst)
+{
+	free(pst->fname);
+	free(pst->lname);
+}
 char * s_gets(char *st, int n)
 {
 	char * ret_val;
