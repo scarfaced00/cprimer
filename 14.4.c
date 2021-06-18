@@ -1,4 +1,4 @@
-/*funds1.c*/
+/*funds2.c*/
 #include <stdio.h>
 #define FUNDLEN 50
 
@@ -9,7 +9,7 @@ struct funds {
 	double savefund;
 };
 
-double sum(double, double);
+double sum(const struct funds *); /*argument is a pointer*/
 
 int main(void)
 {
@@ -20,12 +20,13 @@ int main(void)
 		8543.94
 	};
 	
-	printf("Stan has a total of $%.2f.\n", sum(stan.bankfund, stan.savefund));
+	printf("Stan has a total of $%.2f.\n", sum(&stan));
+	
 	return 0;
 }
 
-/* adds two double numbers*/
-double sum(double x, double y)
+
+double sum(const struct funds * money)
 {
-	return (x+y);
+	return (money->bankfund + money->savefund);
 }
