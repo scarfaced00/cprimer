@@ -1,78 +1,58 @@
-/*names3.c -- use pointers and malloc()*/
+/*flexmemb.c -- flexible array memebr (C99 feature)*/
 #include <stdio.h>
-#include <string.h> //for strcpy(), strlen()
-#include <stdlib.h> //for malloc(), free()
-#define SLEN 81
+#include <stdlib.h>
 
-struct namect {
-	char * fname; //using pointers instead of arrays
-	char * lname;
-	int letters;
+struct flex {     
+	size_t count;
+	double average;
+	double scores[]; //flexible array member
 };
 
-void getinfo(struct namect *); //allocates memory
-void makeinfo(struct namect *);
-void showinfo(const struct namect *);
-void cleanup(struct namect *); //free memory when done
-char * s_gets(char * st, int n);
+void showFlex(const struct flex *p);
 
 int main(void)
 {
-	struct namect person;
+	struct flex *pf1, *pf2;
+	int n = 5;
+	int i;
+	int tot = 0;
 	
-	getinfo(&person);
-	makeinfo(&person);
-	showinfo(&person);
-	cleanup(&person);
-
+	//allocate space for structure plus array
+	pf1 = malloc(sizeof(struct flex) + n * sizeof(double));
+	pf1 -> count = n;
+	for (i = 0; i < n; i++)
+	{
+		pf1->scores[i] = 20.0 - i;
+		tot += pf1->scores[i];
+	}
+	
+	pf1->average = tot/n;
+	showFlex(pf1);
+	
+	n = 9;
+	tot = 0;
+	pf2 = malloc(sizeof(struct flex) + n * sizeof(double));
+	pf2->count = n;
+	
+	for(i = 0; i < n; i++)
+	{
+		pf2->scores[i] = 20.0 - i/2.0;
+		tot += pf2->scores[i];
+	}
+	pf2->average = tot/n;
+	showFlex(pf2);
+	free(pf1);
+	free(pf2);
+	
 	return 0;
 }
 
-void getinfo(struct namect *pst)
+void showFlex(const struct flex *p)
 {
-	char temp[SLEN];
-	printf("Please enter your first name.\n");
-	s_gets(temp, SLEN);
-	//allocate memory to hold name
-	pst->fname = (char *) malloc(strlen(temp) +1);
-	//copy name to allocated memory
-	strcpy(pst->fname, temp);
-	printf("Please enter your last name.\n");
-	s_gets(temp, SLEN);
-	pst->lname = (char *) malloc(strlen(temp) +1);
-	strcpy(pst->lname, temp);
+	int i;
+	printf("Scores : ");
+	for(i = 0; i < p ->count; i++)
+		printf("%g ", p->scores[i]);
+	printf("\nAverage: %g\n", p->average);
 }
-
-void makeinfo(struct namect * pst)
-{
-	pst->letters = strlen(pst->fname) + strlen(pst->lname);
-}
-
-void showinfo(const struct namect * pst)
-{
-	printf("%s %s, your name contains %d letters.\n", pst->fname, pst->lname, pst->letters);
-}
-
-void cleanup(struct namect * pst)
-{
-	free(pst->fname);
-	free(pst->lname);
-}
-char * s_gets(char *st, int n)
-{
-	char * ret_val;
-	char * find;
-	
-	ret_val = fgets(st, n, stdin);
-	if(ret_val)
-	{
-		find = strchr(st, '\n'); //look for newline
-		if (find) //if the address is not NULL,
-			*find = '\0'; //place a null character there
-		else
-			while(getchar() != '\n')
-				continue; //dispose of rest of line
-			}
-			return ret_val;
-	}
 
