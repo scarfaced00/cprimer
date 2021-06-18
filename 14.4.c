@@ -1,32 +1,61 @@
-/*funds3.c*/
+/*names1.c -- ueses pointers to a structure*/
 #include <stdio.h>
-#define FUNDLEN 50
+#include <string.h>
+#define NLEN 30
 
-struct funds {
-	char bank[FUNDLEN];
-	double bankfund;
-	char save[FUNDLEN];
-	double savefund;
+struct namect {
+	char fname[NLEN];
+	char lname[NLEN];
+	int letters;
 };
 
-double sum(struct funds moolah); /*argument is a structure*/
+void getinfo(struct namect *);
+void makeinfo(struct namect *);
+void showinfo(const struct namect *);
+char * s_gets(char * st, int n);
 
 int main(void)
 {
-	struct funds stan = {
-		"Garlic-Melon Bank",
-		4032.27,
-		"Lucky's Savings and Loan",
-		8543.94
-	};
+	struct namect person;
 	
-	printf("Stan has a total of $%.2f.\n", sum(stan));
-	
+	getinfo(&person);
+	makeinfo(&person);
+	showinfo(&person);
 	return 0;
 }
 
 
-double sum(struct funds moolah)
+void getinfo(struct namect * pst)
 {
-	return (moolah.bankfund + moolah.savefund);
+	printf("Please enter your first name.\n");
+	s_gets(pst->fname, NLEN);
+	printf("Please enter your last name.\n");
+	s_gets(pst->lname, NLEN);
 }
+void makeinfo(struct namect * pst)
+{
+	pst->letters = strlen(pst->fname)+strlen(pst->lname);
+}
+void showinfo(const struct namect * pst)
+{
+	printf("%s %s, your name contains %d letters.\n", pst->fname, pst->lname, pst->letters);
+}
+
+char * s_gets(char *st, int n)
+{
+	char * ret_val;
+	char * find;
+	
+	ret_val = fgets(st, n, stdin);
+	if(ret_val)
+	{
+		find = strchr(st, '\n'); //look for newline
+		if (find) //if the address is not NULL,
+			*find = '\0'; //place a null character there
+		else
+			while(getchar() != '\n')
+				continue; //dispose of rest of line
+			}
+			return ret_val;
+	}
+
