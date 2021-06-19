@@ -9,6 +9,11 @@ int main(void)
 	printf("\nan n if it is wrong.\n");
 	printf("Uh...is your number %d?\n", guess);
 	while(getchar() != 'y') /*get response, compare to y*/
+	{
+		printf("Well, then, is it %d?\n", ++guess);
+		while(getchar() != '\n')
+			continue; /*skip rest of input line*/
+	}
 		printf("Well, then, is it %d?\n", ++guess);
 	printf("I knew I could do it!\n");
 	
