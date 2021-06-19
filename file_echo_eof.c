@@ -1,25 +1,16 @@
-/*file_echo_eof.c--reapeats input to end of file*/
+/*guess.c--an inefficient and faulty number-guesser*/
 #include <stdio.h>
-#include <stdlib.h> //for exit()
 int main(void)
 {
-	int ch;
-	FILE *fp;
-	char fname[50]; //to hold the file name
+	int guess = 1;
 	
-	printf("Enter the name of the file: ");
-	scanf("%s", fname);
-	fp = fopen(fname, "r"); //open file for reading
-	if (fp == NULL) //attempted failed
-	{
-		printf("Failed to open file. Bye\n");
-		exit(1); //quit program
-	}
-
-//getc(fp) gets a character from the open file
-	while ((ch = getc(fp)) != EOF)
-		putchar(ch);
-	fclose(fp); //close the file
-		
+	printf("Pick an integer from 1 to 100. I will try to guess ");
+	printf("it.\nRespond with a y if my guess is right and with");
+	printf("\nan n if it is wrong.\n");
+	printf("Uh...is your number %d?\n", guess);
+	while(getchar() != 'y') /*get response, compare to y*/
+		printf("Well, then, is it %d?\n", ++guess);
+	printf("I knew I could do it!\n");
+	
 	return 0;
 }
