@@ -1,25 +1,28 @@
-/*guess.c--an inefficient and faulty number-guesser*/
+/*count.c--using standard i/o*/
 #include <stdio.h>
-int main(void)
+#include <stdlib.h> //exit() prototype
+int main(int argc, char *argv[])
 {
-	int guess = 1;
-	char response;
-	
-	printf("Pick an integer from 1 to 100. I will try to guess ");
-	printf("it.\nRespond with a y if my guess is right and with");
-	printf("\nan n if it is wrong.\n");
-	printf("Uh...is your number %d?\n", guess);
-	while(response = getchar() != 'y') /*get response*/
+	int ch; /*place to store each character as read*/
+	FILE *fp; //"file pointer"
+	unsigned long count = 0;
+	if (argc != 2)
 	{
-		if(response == 'n')
-			printf("Well, then, is it %d?\n", ++guess);
-		else
-			printf("Sorry. I only understand y or n.\n");
-		while(getchar() != '\n')
-			continue; /*skip rest of input line*/
+		printf("Usage: %s filename\n", argv[0]);
+		exit(EXIT_FAILURE);
 	}
-	
-	printf("I knew I could do it!\n");
+	if ((fp = fopen(argv[1], "r")) == NULL)
+	{
+		printf("Can't open %s\n', argv[1]");
+		exit(EXIT_FAILURE);
+	}
+	while ((ch = getc(fp)) != EOF)
+	{
+		putc(ch, stdout); //same as putchar(ch);
+		count++;
+	}
+	fclose(fp);
+	printf("File %s has %lu characters\n", argv[1], count);
 	
 	return 0;
 }
