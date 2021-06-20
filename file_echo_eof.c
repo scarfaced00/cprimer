@@ -1,42 +1,32 @@
-//reducto.c--reduces your files by two-thirds!
+//addword.c--uses fprintf(), fscanf(), and rewind()
 #include <stdio.h>
-#include <stdlib.h> //for exit()
+#include <stdlib.h> 
 #include <string.h>
-int main(int argc, char *argv[])
+#define MAX 41
+int main(void)
 {
-	FILE *in, *out; //declare two file pointers
-	int ch; 
-	char name[LEN]; //storage for output filename
-	int count = 0;
+	FILE *fp;
+	char words[MAX]; 
 	
 	//check for command-line arguments
-	if(argc < 2)
+	if((fp = fopen("wordy", "a+")) == NULL)
 	{
-		fprintf(stderr, "Usage: %s filename\n", argv[0]);
+		fprintf(stderr, "Can't open \"wordy\" file.\n");
 		exit(EXIT_FAILURE);
 	}
-	//set up input
-	if ((in = fopen(argv[1], "r")) == NULL)
-	{
-		fprintf(stderr, "I couldn't open the file \"%s\"\n", argv[1]);
-		exit(EXIT_FAILURE);
-	}
-	//set up output
-	strncpy(name, argv[1], LEN-5); //copy filename
-	name[LEN-5] = '\0';
-	strcat(name, ".red"); //append .red
-	if ((out = fopen(name, "w")) == NULL)
-	{ //open file for writing
-		fprintf(stderr, "Can't create output file.\n");
-		exit(3);
-	}
-	//copy data
-	while((ch = getc(in)) != EOF)
-		if(count++ %3 == 0)
-			putc(ch, out); //print every 3rd char
-	//clean up
-	if(fclose(in) != 0 || fclose(out) != 0)
-		fprintf(stderr, "Error in closing files\n");
+	
+	puts("Enter words to add to the file; press the #");
+	puts("key at the beginning of a line to terminate.");
+	while((fscanf(stdin, "%40s", words) == 1) && (words[0] != #))
+		fprintf(fp, "%s\n", words);
+		
+	puts("File contents:");
+	rewind(fp); /*go back to beginning fo file*/
+	while(fscanf(fp, "%s", words) == 1)
+		puts(words);
+	puts("Done!");
+	if(fclose(fp) != 0)
+		fprintf(stderr, "Error closing file\n");
 		
 	return 0;
 }
