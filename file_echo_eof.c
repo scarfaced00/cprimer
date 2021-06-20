@@ -1,32 +1,14 @@
-//addword.c--uses fprintf(), fscanf(), and rewind()
+/*fgets2.c--using fgets() and fputs()*/
 #include <stdio.h>
-#include <stdlib.h> 
-#include <string.h>
-#define MAX 41
+#define STLEN 10
 int main(void)
 {
-	FILE *fp;
-	char words[MAX]; 
+	char words[STLEN]; 
 	
-	//check for command-line arguments
-	if((fp = fopen("wordy", "a+")) == NULL)
-	{
-		fprintf(stderr, "Can't open \"wordy\" file.\n");
-		exit(EXIT_FAILURE);
-	}
-	
-	puts("Enter words to add to the file; press the #");
-	puts("key at the beginning of a line to terminate.");
-	while((fscanf(stdin, "%40s", words) == 1) && (words[0] != #))
-		fprintf(fp, "%s\n", words);
+	puts("Enter strings (empty line to quit):");
+	while(fgets(words, STLEN, stdin) != NULL && words[0] != '\n')
+		fputs(words, stdout);
 		
-	puts("File contents:");
-	rewind(fp); /*go back to beginning fo file*/
-	while(fscanf(fp, "%s", words) == 1)
-		puts(words);
-	puts("Done!");
-	if(fclose(fp) != 0)
-		fprintf(stderr, "Error closing file\n");
-		
+	puts("Done.");
 	return 0;
 }
