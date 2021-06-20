@@ -1,24 +1,33 @@
-/*fgets3.c--using fgets()*/
+/*reverse.c--displays a file in reverse order*/
 #include <stdio.h>
-#define STLEN 10
+#include <stdlib.h>
+#define CNTL_Z '\032' /*eof marker in DOS text files*/
+#define SLEN 81
 int main(void)
 {
-	char words[STLEN]; 
-	int i;
+	char file[SLEN]; 
+	char ch;
+	FILE *fp;
+	long count, last;
 	
-	puts("Enter strings (empty line to quit):");
-	while(fgets(words, STLEN, stdin) != NULL && words[0] != '\n')
+	puts("Enter the name of the file to be processed:");
+	scanf("%80s", file);
+	if ((fp = fopen(file, "rb")) == NULL)
 	{
-		i = 0;
-		while(words[i] != '\n' && words[i] != '\0')
-			i++;
-		if (words[i] == '\n')
-			words[i] = '\0';
-		else //must have words[i] == '\0'
-			while(getchar() != '\n')
-				continue;
-		puts(words);
+		printf("reverse can't open %s\n", file);
+		exit(EXIT_FAILURE);
 	}
-	puts("Done.");
+	fseek(fp, 0L, SEEK_END) /*go to end of file*/
+	last = ftell(fp);
+	for (count = 1L, count <= last; count++)
+	{
+		fseek(fp, -count, SEEK_END); /*go backward*/
+		ch = getc(fp);
+		if (ch != CNTL_Z && ch != '\r') /*MS-DOS files*/
+			putchar(ch);
+	}
+	putchar('\n');
+	fclose(fp);
+	
 	return 0;
 }
