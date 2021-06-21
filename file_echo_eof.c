@@ -1,4 +1,4 @@
-/*showchar1.c--program with a BIG I/O problem*/
+/*showchar2.c--prints characters in rows and columns*/
 #include <stdio.h>
 void display(char cr, int lines, int width);
 
@@ -6,11 +6,15 @@ int main(void)
 {
 	int ch; //character to be printed
 	int rows, cols; //number of rows and columns
+	
 	printf("Enter a character and two integers:\n");
 	while ((ch = getchar()) != '\n')
 	{
-		scanf("%d %d", &rows, &cols);
+		if(scanf("%d %d", &rows, &cols) != 2)
+			break;
 		display(ch, rows, cols);
+		while (getchar() != '\n')
+			continue;
 		printf("Enter another character and two integers;\n");
 		printf("Enter a newline to quit.\n");
 	}
